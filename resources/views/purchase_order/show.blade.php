@@ -1,147 +1,158 @@
 @extends('layout')
-@section('title', 'eGP Stores | Supplier')
+@section('title', 'eGP Stores | Purchase Orders')
 @section('main-content')
 
 <div class="main-content">
     <section class="section">
       <div class="section-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <h4 style="color:navy">{{$supplier->name}}</h4>
-                <div class="card-header-action">
-                    <a href="" class="badge badge-secondary" data-toggle="modal"
-                    data-target=".edit-supplier"><i class="fas fa-edit"></i> Edit</a>
-
-                    <a href="" class="badge badge-danger" data-toggle="modal"
-                    data-target=".edit-supplier"><i class="fas fa-trash-alt"></i> Delete</a>
-
-                  </div>
-              </div>
-              <div class="card-body">
-                      <div class="row">
-                        <div class="col-3 b-r">
-                          <strong class="text-muted">Contact Person</strong>
-                          <br>
-                          <h6 class="mt-2" style="color:navy">{{$supplier->contact_person}}</h6>
-                        </div>
-                        <div class="col-3 b-r">
-                            <strong class="text-muted">Phone Number</strong>
-                          <br>
-                          <h6 class="mt-2" style="color:navy">{{$supplier->phone_number}}</h6>
-                        </div>
-
-                        <div class="col-2 b-r">
-                            <strong class="text-muted">Email Address</strong>
-                          <br>
-                          <h6 class="mt-2" style="color:navy">{{$supplier->email_address}}</h6>
-                        </div>
-
-                        <div class="col-sm-2 b-r">
-                            <strong class="text-muted">Date Added</strong>
-                          <br>
-                          <h6 class="mt-2" style="color:navy">{{date('d-m-Y H:i', strtotime($supplier->created_at)) }}</h6>
-                        </div>
-
-                        <div class="col-sm-2 b-r">
-                            <strong class="text-muted">Date Updated</strong>
-                          <br>
-                          <h6 class="mt-2" style="color:navy">{{date('d-m-Y H:i', strtotime($supplier->updated_at)) }}</h6>
-                        </div>
+        <div class="invoice">
+            <div class="invoice-print">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="invoice-title">
+                    <h4>Purchase Order
+                    </h4>
+                    <div class="card-header-action">
+                        @if ($order->delivery_status == 0)
+                        <span class="badge badge-warning">Pending</span>
+                        @else
+                        <span class="badge badge-success">Delivered</span>
+                        @endif
                       </div>
-                      <br/>
-                      <hr/>
 
-                      {{-- <p class="section-title">supplier Transactions</p>
-                      <div class="card-body">
-                        <div class="table-responsive">
-                          <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
-                            <thead>
-                              <tr>
-                                <th>Name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Age</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>Tiger Nixon</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011/04/25</td>
-                                <td>$320,800</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div> --}}
+                    <div class="invoice-number">Order #{{ $order->id }} </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 text-md-right">
+                      <address>
+                        <strong>Supplier:</strong><br>
+                        <h6 style="color:navy" class="text-uppercase">{{ $order->supplier->name }}</h6>
+                        {{ $order->supplier->phone_number }}<br>
+                        {{ $order->supplier->email_address }}<br>
+                      </address>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 text-md-left">
+                      <address>
+                        <strong>Order Date:</strong><br>
+                        {{ date('d F Y', strtotime($order->order_date) ) }} <br><br>
+                        <strong>Expected Delivery Date:</strong><br>
+                        {{ date('d F Y', strtotime($order->expected_delivery_date) ) }}
+                      </address>
+                    </div>
+                  </div>
+                </div>
               </div>
+              <div class="col-md-12">
+                  <div class="section-title">Order Summary</div>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover table-border table-md">
+                      <tr>
+                        <th data-width="40">#</th>
+                        <th>Item</th>
+                        <th class="">Description</th>
+                        <th class="text-center">Price (UGX)</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-right">Totals</th>
+                      </tr>
+                      @php
+                          $sum = 0;
+                      @endphp
+                      @foreach ($order->items as $item)
+                        @php
+                        $cnt = $loop->iteration;
+                        @endphp
+                        <tr>
+                            <td> {{ $cnt }} </td>
+                            <td> {{ $item->item_name }} </td>
+                            <td> {{ $item->item_description }} </td>
+                            <td class="text-center"> {{ number_format($item->unit_price) }} </td>
+                            <td class="text-center"> {{ number_format($item->quantity_in_stock) }} </td>
+                            <td class="text-right"> {{ number_format($item->quantity_in_stock * $item->unit_price) }} </td>
+                        </tr>
+                        @php
+                            $sum += ($item->quantity_in_stock * $item->unit_price)
+                        @endphp
+                      @endforeach
+                    </table>
+                  </div>
+                  <div class="row mt-4">
+                    <div class="col-lg-12 text-right">
+                      <div class="invoice-detail-item">
+                        <div class="invoice-detail-name">Total</div>
+                        <div class="invoice-detail-value invoice-detail-value-lg">UGX {{number_format($sum)}} </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-md-right">
+                @if ($order->delivery_status == 0 )
+                <div class="float-lg-left mb-lg-0 mb-3">
+                    <button class="btn btn-success btn-icon icon-left"  data-toggle="modal" data-target="#updateDeliveryStatus"><i class="fas fa-check"></i> Update Delivery</button>
+                    <a href="{{ route('purchase_order.edit', $order->id) }}" class="btn btn-primary btn-icon icon-left"><i class="fas fa-edit"></i> Edit Order</a>
+                    <button class="btn btn-danger btn-icon icon-left" data-toggle="modal" data-target="#deleteOrder"><i class="fas fa-trash-alt"></i> Delete</button>
+                  </div>
+                @endif
+
+              <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
             </div>
           </div>
-        </div>
       </div>
     </section>
-
-    <div class="modal fade edit-supplier" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="myLargeModalLabel">Add New Supplier</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+            <!-- Update Delivery -->
+            <div class="modal fade" id="updateDeliveryStatus" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalCenterTitle">Update Delivery</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  You are confirming that the items in this purchase order have been delivered.
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                    <form action="{{ route('purchase_order.confirm_delivery', $order->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="delivery_status" id="delivery_status" value="1">
+                        <button type="submit" class="btn btn-success">Confirm Delivery</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </form>
+                </div>
+              </div>
             </div>
-            <div class="modal-body">
-             <div class="card-body">
-             <form action="{{ route('supplier.update', $supplier->id) }}" method="post">
-                 @csrf
-                 @method('PUT')
-                 <div class="form-row">
-                     <div class="form-group col-md-3">
-                       <label for="supplier_name">Supplier Name</label>
-                       <input type="text" class="form-control" name="supplier_name" id="supplier_name" value="{{ $supplier->name }}">
-                       @error('supplier_name')
-                       <div class="form-text text-danger">{{ $message }}</div>
-                       @enderror
-                     </div>
-                     <div class="form-group col-md-3">
-                       <label for="contact_person">Contract Person</label>
-                       <input type="text" class="form-control" id="contact_person" name="contact_person" value="{{ $supplier->contact_person }}" >
-                       @error('contact_person')
-                       <div class="form-text text-danger">{{ $message }}</div>
-                       @enderror
-                     </div>
-                     <div class="form-group col-md-3">
-                         <label for="phone_number">Phone Number</label>
-                         <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ $supplier->phone_number }}" placeholder="Format: 2567...">
-                         @error('phone_number')
-                         <div class="form-text text-danger">{{ $message }}</div>
-                         @enderror
-                       </div>
-                       <div class="form-group col-md-3">
-                         <label for="email_address">Email Address</label>
-                         <input type="email" class="form-control" id="email_address" name="email_address" value="{{ $supplier->email_address }}">
-                         @error('email_address')
-                         <div class="form-text text-danger">{{ $message }}</div>
-                         @enderror
-                       </div>
-                 </div>
-               <div class="text-right">
-                 <button class="btn btn-success mr-1" type="submit">Update</button>
-                 <button class="btn btn-secondary" type="reset">Reset</button>
-               </div>
-             </form>
-             </div>
+          </div>
+          {{-- Delete order --}}
+          <div class="modal fade" id="deleteOrder" tabindex="-1" role="dialog"
+          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Delete Purchase Order</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to delete this Purchase Order? <br><br> <b>Note:</b> This action cannot be reversed.
+              </div>
+              <div class="modal-footer bg-whitesmoke br">
+                  <form action="{{ route('purchase_order.destroy', $order->id) }}" method="POST">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
- </div>
+    </div>
 @endsection
 

@@ -16,7 +16,7 @@
   <link rel='shortcut icon' type='image/x-icon' href='{{asset('assets/img/egp_logo.png')}}'/>
   <style>
     .form-control{
-        color:midnightblue
+        color:mediumblue;
     }
   </style>
 </head>
@@ -58,7 +58,6 @@
         </ul>
       </nav>
 
-
       <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
@@ -75,7 +74,12 @@
             <li class="menu-header">Stores</li>
 
             <li class="dropdown {{ (request()->is('purchase_order*')) ? 'active' : '' }}">
-              <a href="{{ route('purchase_order.index') }}"><i data-feather="shopping-cart"></i><span>Purchase Orders</span></a>
+                <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                        data-feather="shopping-cart"></i><span>Purchase Orders</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ (request()->is('purchase_order')) ? 'active' : '' }}"><a class="nav-link" href="{{ route('purchase_order.index') }}">View Orders</a></li>
+                    <li class="{{ (request()->is('purchase_order/create')) ? 'active' : '' }}"><a class="nav-link" href="{{ route('purchase_order.create') }}">Add New Order</a></li>
+                </ul>
             </li>
 
             <li class="dropdown {{ (request()->is('supplier*')) ? 'active' : '' }}">
@@ -124,12 +128,24 @@
     </script>
 @endif
 
+@if (session('error'))
+<script>
+    var toastMessage = @json(session('error', ''));
+    iziToast.error({
+      title: 'Error',
+      message: toastMessage,
+      position: 'topRight',
+      timeout: 5000
+    });
+    </script>
+@endif
+
 @if ($errors->any())
 <script>
     iziToast.error({
       title: 'Error!',
       position: 'topRight',
-      timeout: 5000
+      timeout: 8000
     });
     </script>
 @endif

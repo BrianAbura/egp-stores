@@ -30,4 +30,5 @@ Route::middleware('auth')->group(function(){
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::resource('supplier', SupplierController::class);
     Route::resource('purchase_order', PurchaseOrderController::class);
+    Route::put('/purchase_order/{id}/confirm_delivery', [PurchaseOrderController::class, 'confirm_delivery'])->name('purchase_order.confirm_delivery');
 });

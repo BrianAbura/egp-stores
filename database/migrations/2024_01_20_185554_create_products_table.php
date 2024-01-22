@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Supplier;
-use App\Models\User;
+use App\Models\purchase_order;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,13 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('purchase_orders', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('supplier_id')->constrained();
-            $table->date('order_date');
-            $table->date('expected_delivery_date');
-            $table->integer('delivery_status');
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(purchase_order::class);
+            $table->string('item_name');
+            $table->string('item_description');
+            $table->integer('unit_price');
+            $table->integer('quantity_in_stock');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('purchase_orders');
+        Schema::dropIfExists('products');
     }
 };
