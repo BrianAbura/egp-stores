@@ -54,7 +54,7 @@
 
                           <div class="form-group col-md-2">
                             <label for="delivery_status">Delivery Status</label>
-                            <select class="custom-select form-control" id="inputGroupSelect01" required name="delivery_status">
+                            <select class="custom-select form-control" id="delivery_status" required name="delivery_status">
                               @if ($order['order']->delivery_status == 0)
                                 <option value="{{ $order['order']->delivery_status }}">Pending</option>
                                 <option value="1">Delivered</option>
@@ -66,6 +66,16 @@
                              @error('delivery_status')
                              <div class="form-text text-danger">{{ $message }}</div>
                              @enderror
+                          </div>
+
+                          <div class="form-group col-md-2" id="actual_delivery_date_div">
+                            <label for="actual_delivery_date">Actual Delivery Date <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control datepicker" id="actual_delivery_date" name="actual_delivery_date" value="{{ old('actual_delivery_date') }}" >
+                          </div>
+
+                          <div class="form-group col-md-3" id="received_by_div">
+                            <label for="received_by">Received By <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="received_by" name="received_by" value="{{ old('received_by') }}">
                           </div>
                     </div>
                     <br/>
@@ -87,7 +97,7 @@
                               </div>
                               <div class="form-group col-md-2">
                                 <label for="quantity">Quantity</label>
-                                <input type="number" min="1" class="form-control" id="quantity" name="quantity[]" value="{{ $item->quantity_in_stock }}" required>
+                                <input type="number" min="1" class="form-control" id="quantity" name="quantity[]" value="{{ $item->quantity }}" required>
                               </div>
                               <div class="form-ds col-md-1 float-right">
                                 <br>

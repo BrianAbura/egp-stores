@@ -32,49 +32,55 @@ class PurchaseOrderController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'supplier' => 'required',
-            'expected_delivery_date' => 'required',
-            'delivery_status' => 'required'
-        ]);
+        try {
+            $request->validate([
+                'supplier' => 'required',
+                'order_date' => 'required'
+            ]);
 
-        /**
-         * delivery_status - 0 (pending), 1 (delivered)
-         */
+            /**
+             * delivery_status - 0 (pending), 1 (delivered)
+             */
 
-        $order = new purchase_order();
-        $order->supplier_id = strip_tags($request->supplier);
-        $order->order_date = strip_tags($request->order_date);
-        $order->expected_delivery_date = strip_tags($request->expected_delivery_date);
-        $order->delivery_status = strip_tags($request->delivery_status);
-        $order->user_id = Auth::user()->id;
-        $order->save();
+            $order = new purchase_order();
+            $order->supplier_id = strip_tags($request->supplier);
+            $order->order_date = strip_tags($request->order_date);
+            $order->expected_delivery_date = strip_tags($request->expected_delivery_date);
+            $order->delivery_status = strip_tags($request->delivery_status);
+            $order->actual_delivery_date = strip_tags($request->actual_delivery_date);
+            $order->received_by = strip_tags($request->received_by);
+            $order->user_id = Auth::user()->id;
+            $order->save();
 
-        $order_id = $order->id;
+            $order_id = $order->id;
 
-        // Process the submitted data, including the dynamically added rows
-        $itemNames = $request->input('item_name');
-        $ItemDescs = $request->input('item_description');
-        $ItemPrices = $request->input('unit_price');
-        $itemQtys = $request->input('quantity');
+            // Process the submitted data, including the dynamically added rows
+            $itemNames = $request->input('item_name');
+            $ItemDescs = $request->input('item_description');
+            $ItemPrices = $request->input('unit_price');
+            $itemQtys = $request->input('quantity');
 
-         // Loop through the items
-        foreach($itemNames as $key => $item_name){
-            $item_descriptions = $ItemDescs[$key];
-            $unit_price = $ItemPrices[$key];
-            $quantity = $itemQtys[$key];
+             // Loop through the items
+            foreach($itemNames as $key => $item_name){
+                $item_descriptions = $ItemDescs[$key];
+                $unit_price = $ItemPrices[$key];
+                $quantity = $itemQtys[$key];
 
-        // Save the items to the Products table
-            $product = new product();
-            $product->purchase_order_id = $order_id;
-            $product->item_name = $item_name;
-            $product->item_description = $item_descriptions;
-            $product->unit_price = $unit_price;
-            $product->quantity_in_stock = $quantity;
-            $product->save();
+            // Save the items to the Products table
+                $product = new product();
+                $product->purchase_order_id = $order_id;
+                $product->item_name = $item_name;
+                $product->item_description = $item_descriptions;
+                $product->unit_price = $unit_price;
+                $product->quantity = $quantity;
+                $product->save();
+            }
+            return back()->with('success', 'The Purchase Order has been added successfully.');
         }
-
-        return back()->with('success', 'The Purchase Order has been added successfully.');
+        catch (\Exception $e) {
+            \Log::error($e);
+            return redirect()->back()->with('error', 'An error occurred while processing this request. Please check the form and try again.');
+        }
 
     }
 
@@ -101,25 +107,14 @@ class PurchaseOrderController extends Controller
      */
     public function update(Request $request, $order_id)
     {
-        $request->validate([
-            'supplier' => 'required',
-            'expected_delivery_date' => 'required',
-            'delivery_status' => 'required'
-        ]);
-
-        /**
-         * delivery_status - 0 (pending), 1 (delivered)
-         */
-
         $order = purchase_order::find($order_id);
         $order->supplier_id = strip_tags($request->supplier);
         $order->order_date = strip_tags($request->order_date);
         $order->expected_delivery_date = strip_tags($request->expected_delivery_date);
         $order->delivery_status = strip_tags($request->delivery_status);
+        $order->actual_delivery_date = strip_tags($request->actual_delivery_date);
+        $order->received_by = strip_tags($request->received_by);
         $order->save();
-
-        // Delete the items first
-        product::where('purchase_order_id', $order_id)->delete();
 
         // Process the newly submitted data, including the dynamically added rows
         $itemNames = $request->input('item_name');
@@ -130,9 +125,12 @@ class PurchaseOrderController extends Controller
         if (empty($itemNames)) {
             //return ()->with('error', 'The Purchase Order cannot be saved without the order items. Please add order items and resubmit.');
             return redirect()->route('purchase_order.edit', $order_id)
-            ->with('error', 'The Purchase Order cannot be saved without the order items. Please add the items and resubmit.');
+            ->with('error', 'The Purchase Order cannot be saved without the order items. Please include the items and resubmit.');
         }
-         // Loop through the items
+         // Delete the items first
+         product::where('purchase_order_id', $order_id)->delete();
+
+         // Loop through the new items
         foreach($itemNames as $key => $item_name){
             $item_descriptions = $ItemDescs[$key];
             $unit_price = $ItemPrices[$key];
@@ -144,28 +142,31 @@ class PurchaseOrderController extends Controller
             $product->item_name = $item_name;
             $product->item_description = $item_descriptions;
             $product->unit_price = $unit_price;
-            $product->quantity_in_stock = $quantity;
+            $product->quantity = $quantity;
             $product->save();
         }
-
-        return back()->with('success', 'The Purchase Order has been updated successfully.');
+        return redirect()->route('purchase_order.show', $order_id)->with('success', 'The Purchase Order has been updated successfully.');
     }
 
     public function confirm_delivery(Request $request, $order_id)
     {
+        $request->validate([
+            'actual_delivery_date' => 'required',
+            'received_by' => 'required'
+        ]);
+
         $order = purchase_order::find($order_id);
         $order->delivery_status = 1;
+        $order->actual_delivery_date = strip_tags($request->actual_delivery_date);
+        $order->received_by = strip_tags($request->received_by);
         $order->save();
 
         return back()->with('success', 'Delivery confirmed, and product list updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($order_id)
     {
-        // Delete the items first then the purchase Order
+        // Delete the items first then the purchase Order - Only when not delivered
         product::where('purchase_order_id', $order_id)->delete();
         purchase_order::destroy($order_id);
         return redirect()->route('purchase_order.index')->with('success', 'Purchase Order deleted successfully');

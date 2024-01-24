@@ -47,13 +47,23 @@
 
                           <div class="form-group col-md-2">
                             <label for="delivery_status">Delivery Status</label>
-                            <select class="custom-select form-control" id="inputGroupSelect01" required name="delivery_status">
+                            <select class="custom-select form-control" id="delivery_status" required name="delivery_status">
                                 <option value="0">Pending</option>
                                 <option value="1">Delivered</option>
                              </select>
                              @error('delivery_status')
                              <div class="form-text text-danger">{{ $message }}</div>
                              @enderror
+                          </div>
+
+                          <div class="form-group col-md-2" id="actual_delivery_date_div">
+                            <label for="actual_delivery_date">Actual Delivery Date <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control datepicker" id="actual_delivery_date" name="actual_delivery_date" value="{{ old('actual_delivery_date') }}" >
+                          </div>
+
+                          <div class="form-group col-md-3" id="received_by_div">
+                            <label for="received_by">Received By <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="received_by" name="received_by" value="{{ old('received_by') }}">
                           </div>
                     </div>
                     <br/>

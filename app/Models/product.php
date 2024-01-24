@@ -11,6 +11,6 @@ class product extends Model
 
     public function order()
     {
-        return $this->belongsTo(purchase_order::class);
+        return $this->belongsTo(purchase_order::class, 'purchase_order_id');
     }
 }

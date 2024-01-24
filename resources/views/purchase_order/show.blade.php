@@ -33,7 +33,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-12 text-md-left">
+                    <div class="col-md-6 text-md-left">
                       <address>
                         <strong>Order Date:</strong><br>
                         {{ date('d F Y', strtotime($order->order_date) ) }} <br><br>
@@ -41,6 +41,19 @@
                         {{ date('d F Y', strtotime($order->expected_delivery_date) ) }}
                       </address>
                     </div>
+
+                    @if ($order->delivery_status == 1)
+                    <div class="col-md-6 text-md-right">
+                        <address>
+                          <strong>Actual Delivery Date:</strong><br>
+                          {{ date('d F Y', strtotime($order->actual_delivery_date) ) }} <br><br>
+                          <strong>Received By:</strong><br>
+                          {{ $order->received_by }}
+                        </address>
+                    </div>
+                    @endif
+
+
                   </div>
                 </div>
               </div>
@@ -68,11 +81,11 @@
                             <td> {{ $item->item_name }} </td>
                             <td> {{ $item->item_description }} </td>
                             <td class="text-center"> {{ number_format($item->unit_price) }} </td>
-                            <td class="text-center"> {{ number_format($item->quantity_in_stock) }} </td>
-                            <td class="text-right"> {{ number_format($item->quantity_in_stock * $item->unit_price) }} </td>
+                            <td class="text-center"> {{ number_format($item->quantity) }} </td>
+                            <td class="text-right"> {{ number_format($item->quantity * $item->unit_price) }} </td>
                         </tr>
                         @php
-                            $sum += ($item->quantity_in_stock * $item->unit_price)
+                            $sum += ($item->quantity * $item->unit_price)
                         @endphp
                       @endforeach
                     </table>
@@ -114,12 +127,29 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  You are confirming that the items in this purchase order have been delivered.
+                  <span style="color:navy">Confirm that the items in this purchase order have been delivered.</span><br><br>
+                  <form action="{{ route('purchase_order.confirm_delivery', $order->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Actual Delivery Date</label>
+                            <input type="text" class="form-control datepicker" name="actual_delivery_date">
+                            @error('actual_delivery_date')
+                            <div class="form-text text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group col-md-6">
+                          <label>Received By</label>
+                          <input type="text" class="form-control" name="received_by">
+                          @error('received_by')
+                             <div class="form-text text-danger">{{ $message }}</div>
+                          @enderror
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
-                    <form action="{{ route('purchase_order.confirm_delivery', $order->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
                         <input type="hidden" name="delivery_status" id="delivery_status" value="1">
                         <button type="submit" class="btn btn-success">Confirm Delivery</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

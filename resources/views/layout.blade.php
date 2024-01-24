@@ -82,6 +82,15 @@
                 </ul>
             </li>
 
+
+            <li class="dropdown {{ (request()->is('products*')) ? 'active' : '' }}">
+                <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                        data-feather="list"></i><span>Products/Items</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ (request()->is('products')) ? 'active' : '' }}"><a class="nav-link" href="{{ route('products.index') }}">View All</a></li>
+                </ul>
+            </li>
+
             <li class="dropdown {{ (request()->is('supplier*')) ? 'active' : '' }}">
                 <a href="{{ route('supplier.index') }}"><i data-feather="users"></i><span>Suppliers</span></a>
               </li>

@@ -38,3 +38,21 @@ $(document).ready(function () {
         $(this).closest('.item-row').remove();
     });
 });
+
+// Capture Actual Delivery and person
+$(document).ready(function() {
+    $('#actual_delivery_date_div').hide();
+    $('#received_by_div').hide();
+
+    $('#delivery_status').change(function() {
+        var selectedValue = $(this).val();
+
+        if (selectedValue == 1) {
+            $('#actual_delivery_date_div').show();
+            $('#received_by_div').show();
+        } else {
+            $('#actual_delivery_date_div').hide();
+            $('#received_by_div').hide();
+        }
+    });
+});

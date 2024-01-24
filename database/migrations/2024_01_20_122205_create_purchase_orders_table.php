@@ -19,6 +19,8 @@ return new class extends Migration
             $table->date('order_date');
             $table->date('expected_delivery_date');
             $table->integer('delivery_status');
+            $table->string('received_by')->nullable();
+            $table->date('actual_delivery_date')->nullable();
             $table->foreignIdFor(User::class);
             $table->timestamps();
         });

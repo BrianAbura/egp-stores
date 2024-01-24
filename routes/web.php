@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
@@ -31,4 +32,5 @@ Route::middleware('auth')->group(function(){
     Route::resource('supplier', SupplierController::class);
     Route::resource('purchase_order', PurchaseOrderController::class);
     Route::put('/purchase_order/{id}/confirm_delivery', [PurchaseOrderController::class, 'confirm_delivery'])->name('purchase_order.confirm_delivery');
+    Route::resource('products', ProductController::class);
 });

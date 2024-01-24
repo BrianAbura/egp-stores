@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\product;
+use App\Models\purchase_order;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -12,7 +13,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+       $products = product::whereHas('order', function($query){
+        $query->where('delivery_status', 1);
+       })->get();
+
+       return view('product.index', ['products' => $products]);
+
     }
 
     /**
