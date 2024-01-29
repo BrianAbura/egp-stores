@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'eGP Stores | Products_Items')
+@section('title', 'eGP Stores | Items In Store')
 @section('main-content')
 
 <div class="main-content">
@@ -9,7 +9,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h4>Products/Items</h4>
+                <h4>Items In Store</h4>
               </div>
 
               <div class="card-body">
@@ -20,21 +20,20 @@
                         <th class="text-center">
                            Order No.
                           </th>
-                        <th>Item/Product Name</th>
+                        <th>Item Name</th>
                         <th>Item Description</th>
-                        <th>Quantity</th>
-                        <th>Delivery Status</th>
+                        <th>Quantity In Store</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                        {{ $products }}
-                        @foreach ($products as $item)
+                        @foreach ($items as $item)
                             <tr>
-                                <td class="text-center">{{ $item->purchase_order_id }}</td>
+                                <td class="text-center h6"><a href="{{route('purchase_order.show', $item->purchase_order_id)}}"> {{$item->purchase_order_id}} </a></td>
                                 <td>{{ $item->item_name }}</td>
                                 <td>{{ $item->item_description }}</td>
-                                <td>{{ $item->item_description }}</td>
+                                <td>{{ $item->quantity }}</td>
+                                <td></td>
                             </tr>
                         @endforeach
                     </tbody>

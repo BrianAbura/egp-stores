@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\items;
 use App\Models\product;
 use App\Models\purchase_order;
 use App\Models\Supplier;
@@ -74,6 +75,16 @@ class PurchaseOrderController extends Controller
                 $product->unit_price = $unit_price;
                 $product->quantity = $quantity;
                 $product->save();
+
+                            // Add Delivered Items to item in store
+            if($request->delivery_status == 1){
+                $store = new items();
+                $store->purchase_order_id = $order_id;
+                $store->item_name = $item_name;
+                $store->item_description = $item_descriptions;
+                $store->quantity = $quantity;
+                $store->save();
+            }
             }
             return back()->with('success', 'The Purchase Order has been added successfully.');
         }
@@ -144,6 +155,16 @@ class PurchaseOrderController extends Controller
             $product->unit_price = $unit_price;
             $product->quantity = $quantity;
             $product->save();
+
+            // Add Delivered Items to item in store
+            if($request->delivery_status == 1){
+                $store = new items();
+                $store->purchase_order_id = $order_id;
+                $store->item_name = $item_name;
+                $store->item_description = $item_descriptions;
+                $store->quantity = $quantity;
+                $store->save();
+            }
         }
         return redirect()->route('purchase_order.show', $order_id)->with('success', 'The Purchase Order has been updated successfully.');
     }
@@ -160,6 +181,17 @@ class PurchaseOrderController extends Controller
         $order->actual_delivery_date = strip_tags($request->actual_delivery_date);
         $order->received_by = strip_tags($request->received_by);
         $order->save();
+
+         // Add Delivered Items to item in store
+            $products = product::where('purchase_order_id', $order_id)->get();
+            foreach($products as $product){
+                $store = new items();
+                $store->purchase_order_id = $order_id;
+                $store->item_name = $product->item_name;
+                $store->item_description = $product->item_description;
+                $store->quantity = $product->quantity;
+                $store->save();
+            }
 
         return back()->with('success', 'Delivery confirmed, and product list updated successfully.');
     }

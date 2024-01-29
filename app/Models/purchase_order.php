@@ -17,4 +17,9 @@ class purchase_order extends Model
     {
         return $this->hasMany(product::class, 'purchase_order_id');
     }
+
+    // public function items()
+    // {
+    //     return $this->hasMany(items::class, 'purchase_order_id');
+    // }
 }

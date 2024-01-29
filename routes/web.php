@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SupplierController;
@@ -33,4 +34,14 @@ Route::middleware('auth')->group(function(){
     Route::resource('purchase_order', PurchaseOrderController::class);
     Route::put('/purchase_order/{id}/confirm_delivery', [PurchaseOrderController::class, 'confirm_delivery'])->name('purchase_order.confirm_delivery');
     Route::resource('products', ProductController::class);
+    Route::get('items', [ItemsController::class, 'index'])->name('items.index');
+    // Items Issued
+    Route::get('items.issued', [ItemsController::class, 'issued'])->name('items.issued');
+    Route::get('items.issue_items', [ItemsController::class, 'issue_items'])->name('items.issue_items');
+    Route::post('items.store_issued_items', [ItemsController::class, 'store_issued_items'])->name('items.store_issued_items');
+    // Items Returned
+    Route::get('items.returned', [ItemsController::class, 'returned'])->name('items.returned');
+    Route::get('items.return_items', [ItemsController::class, 'return_items'])->name('items.return_items');
+    Route::post('items.store_returned_items', [ItemsController::class, 'store_returned_items'])->name('items.store_returned_items');
+
 });

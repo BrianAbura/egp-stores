@@ -67,11 +67,20 @@
           </div>
           <ul class="sidebar-menu">
             <li class="menu-header">Main</li>
-            <li class="dropdown active">
-              <a href="index.html" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+            <li class="dropdown {{ (request()->is('home*')) ? 'active' : '' }}">
+              <a href="{{route('home')}}" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
             </li>
 
             <li class="menu-header">Stores</li>
+            <li class="dropdown {{ (request()->is('items*')) ? 'active' : '' }}">
+                <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                        data-feather="list"></i><span>Items In Store</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ (request()->is('items')) ? 'active' : '' }}"><a class="nav-link" href="{{ route('items.index') }}">View All</a></li>
+                    <li class="{{ (request()->is('items.issued') || request()->is('items.issue_items')) ? 'active' : '' }}"><a class="nav-link" href="{{ route('items.issued') }}">Items Issued</a></li>
+                    <li class="{{ (request()->is('items.returned')) ? 'active' : '' }}"><a class="nav-link" href="{{ route('items.returned') }}">Items Returned</a></li>
+                </ul>
+            </li>
 
             <li class="dropdown {{ (request()->is('purchase_order*')) ? 'active' : '' }}">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i
@@ -79,15 +88,6 @@
                 <ul class="dropdown-menu">
                     <li class="{{ (request()->is('purchase_order')) ? 'active' : '' }}"><a class="nav-link" href="{{ route('purchase_order.index') }}">View Orders</a></li>
                     <li class="{{ (request()->is('purchase_order/create')) ? 'active' : '' }}"><a class="nav-link" href="{{ route('purchase_order.create') }}">Add New Order</a></li>
-                </ul>
-            </li>
-
-
-            <li class="dropdown {{ (request()->is('products*')) ? 'active' : '' }}">
-                <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                        data-feather="list"></i><span>Products/Items</span></a>
-                <ul class="dropdown-menu">
-                    <li class="{{ (request()->is('products')) ? 'active' : '' }}"><a class="nav-link" href="{{ route('products.index') }}">View All</a></li>
                 </ul>
             </li>
 
