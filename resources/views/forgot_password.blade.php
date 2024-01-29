@@ -40,9 +40,17 @@
                 {{-- <h1>Welcome</h1> --}}
                 <div class="card card-primary">
                     <div class="card-header">
-                      <h4>Login</h4>
+                      <h4>Forgot Your Password?</h4>
+
                     </div>
+
                     <div class="card-body">
+
+                        @if (session('status_error'))
+                        <p class="text-danger">
+                            {{ session('status_error') }}
+                        </p>
+                        @endif
 
                         @if (session('status_ok'))
                         <p class="text-success">
@@ -50,15 +58,11 @@
                         </p>
                         @endif
 
-                        @if (session('error'))
-                        <p class="text-danger">
-                            {{ session('error') }}
-                        </p>
-                        @endif
-
-                      <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate="">
+                      <form method="POST" action="{{ route('forgot_password_email') }}" class="needs-validation" novalidate="">
                         @csrf
                         <div class="form-group">
+                            <p class="text-center" style="color: navy">We will send a link to reset your password</p>
+
                           <label for="email">Email</label>
                           <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
                           <div class="invalid-feedback">
@@ -66,27 +70,18 @@
                           </div>
                         </div>
                         <div class="form-group">
-                          <div class="d-block">
-                            <label for="password" class="control-label">Password</label>
-                            <div class="float-right">
-                              <a href="{{route('forgot_password')}}" class="text-small">
-                                Forgot Password?
-                              </a>
-                            </div>
-                          </div>
-                          <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
-                          <div class="invalid-feedback">
-                            please fill in your password
-                          </div>
                         </div>
                         <div class="form-group">
-                        </div>
-                        <div class="form-group">
-                          <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
-                            Login
+                          <button type="submit" class="btn btn-light btn-lg btn-block" tabindex="4">
+                            Submit Request
                           </button>
                         </div>
                       </form>
+                      <div class="float-right">
+                        <a href="{{route('welcome')}}" class="text-small">
+                         Back to Login
+                        </a>
+                      </div>
                     </div>
                   </div>
             </div>

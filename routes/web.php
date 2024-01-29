@@ -17,10 +17,10 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function(){
     Route::get('login', [AuthController::class, 'login'])->name('login');
     Route::post('login', [AuthController::class, 'LoginPost'])->name('login');
-    Route::get('forgot-password', function(){
+    Route::get('forgot_password', function(){
         return view('forgot_password');
-    })->name('password.request');
-    Route::post('forgot-password', [AuthController::class, 'ForgotPasswordPost'])->name('password.email');
+    })->name('forgot_password');
+    Route::post('forgot_password_post', [AuthController::class, 'ForgotPasswordPost'])->name('forgot_password_email');
     Route::get('/reset-password/{token}', function(string $token){
         return view('reset_password', ['token' => $token]);
     })->name('password.reset');
