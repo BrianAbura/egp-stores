@@ -11,7 +11,8 @@ class ItemsController extends Controller
 {
     public function index()
     {
-        return view('items.index', ['items' => items::all()]);
+        $items = items::with('product')->get();
+        return view('items.index', ['items' => $items]);
     }
 
     // Issued Items

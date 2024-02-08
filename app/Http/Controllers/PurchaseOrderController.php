@@ -53,7 +53,7 @@ class PurchaseOrderController extends Controller
             $order->user_id = Auth::user()->id;
             $order->save();
 
-            $order_id = $order->id;
+            $order_id = $order->id; // ID of the order
 
             // Process the submitted data, including the dynamically added rows
             $itemNames = $request->input('item_name');
@@ -76,9 +76,10 @@ class PurchaseOrderController extends Controller
                 $product->quantity = $quantity;
                 $product->save();
 
-                            // Add Delivered Items to item in store
+                // Add Delivered Items to item in store
             if($request->delivery_status == 1){
                 $store = new items();
+                $store->product_id = $product->id; //ID of the product
                 $store->purchase_order_id = $order_id;
                 $store->item_name = $item_name;
                 $store->item_description = $item_descriptions;
@@ -159,6 +160,7 @@ class PurchaseOrderController extends Controller
             // Add Delivered Items to item in store
             if($request->delivery_status == 1){
                 $store = new items();
+                $store->product_id = $product->id; //ID of the product
                 $store->purchase_order_id = $order_id;
                 $store->item_name = $item_name;
                 $store->item_description = $item_descriptions;
@@ -186,6 +188,7 @@ class PurchaseOrderController extends Controller
             $products = product::where('purchase_order_id', $order_id)->get();
             foreach($products as $product){
                 $store = new items();
+                $store->product_id = $product->id; //ID of the product
                 $store->purchase_order_id = $order_id;
                 $store->item_name = $product->item_name;
                 $store->item_description = $product->item_description;

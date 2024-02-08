@@ -16,23 +16,29 @@
                 <div class="table-responsive">
                   <table class="table table-striped table-hover table-border" id="table-1">
                     <thead>
-                      <tr>
+                      <tr class="table-secondary">
                         <th class="text-center">
                            Order No.
                           </th>
                         <th>Item Name</th>
                         <th>Item Description</th>
-                        <th>Quantity In Store</th>
+                        <th>Initial Quantity</th>
+                        <th>Current Quantity In Store</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                         @foreach ($items as $item)
-                            <tr>
                                 <td class="text-center h6"><a href="{{route('purchase_order.show', $item->purchase_order_id)}}"> {{$item->purchase_order_id}} </a></td>
                                 <td>{{ $item->item_name }}</td>
                                 <td>{{ $item->item_description }}</td>
-                                <td>{{ $item->quantity }}</td>
+                                <td>{{ $item->product->quantity }}</td>
+                                @if ($item->quantity == 0)
+                                    <td class="text-danger">
+                                @else
+                                <td>
+                                @endif
+                                {{ $item->quantity }}</td>
                                 <td></td>
                             </tr>
                         @endforeach
