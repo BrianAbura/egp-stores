@@ -137,7 +137,6 @@
                             <img src="assets/img/banner/supplier.png" alt="" width="100px">
                         </div>
                     </a>
-
                 </div>
                 </div>
             </div>
