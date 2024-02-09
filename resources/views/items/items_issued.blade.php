@@ -32,7 +32,9 @@
                         <th>To be Returned</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody>@php
+                        $sum = 0;
+                    @endphp
                         @foreach ($items as $item)
                             <tr>
                                 <td class="text-center h6"><a href="{{route('purchase_order.show', $item->item_details->purchase_order_id)}}"> {{$item->item_details->purchase_order_id}} </a></td>
@@ -49,8 +51,18 @@
                                     @endif
                                 </td>
                             </tr>
+                            @php
+                                $sum += $item->quantity;
+                            @endphp
                         @endforeach
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" class="table-default"></td>
+                            <td class="text-right"><b>Total:</b></td>
+                            <td class="text-left"> <b>{{number_format($sum)}}</b> </td>
+                        </tr>
+                    </tfoot>
                   </table>
                 </div>
               </div>
