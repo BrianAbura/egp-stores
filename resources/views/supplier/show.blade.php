@@ -124,14 +124,14 @@
                        <div class="form-text text-danger">{{ $message }}</div>
                        @enderror
                      </div>
-                     <div class="form-group col-md-3">
+                     <div class="form-group col-md-2">
                          <label for="phone_number">Phone Number</label>
                          <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ $supplier->phone_number }}" placeholder="Format: 2567...">
                          @error('phone_number')
                          <div class="form-text text-danger">{{ $message }}</div>
                          @enderror
                        </div>
-                       <div class="form-group col-md-3">
+                       <div class="form-group col-md-4">
                          <label for="email_address">Email Address</label>
                          <input type="email" class="form-control" id="email_address" name="email_address" value="{{ $supplier->email_address }}">
                          @error('email_address')
