@@ -28,13 +28,13 @@
                           <br>
                           <h6 class="mt-2" style="color:navy">{{$supplier->contact_person}}</h6>
                         </div>
-                        <div class="col-3 b-r">
+                        <div class="col-2 b-r">
                             <strong class="text-muted">Phone Number</strong>
                           <br>
                           <h6 class="mt-2" style="color:navy">{{$supplier->phone_number}}</h6>
                         </div>
 
-                        <div class="col-2 b-r">
+                        <div class="col-3 b-r">
                             <strong class="text-muted">Email Address</strong>
                           <br>
                           <h6 class="mt-2" style="color:navy">{{$supplier->email_address}}</h6>
@@ -124,14 +124,14 @@
                        <div class="form-text text-danger">{{ $message }}</div>
                        @enderror
                      </div>
-                     <div class="form-group col-md-2">
+                     <div class="form-group col-md-3">
                          <label for="phone_number">Phone Number</label>
                          <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ $supplier->phone_number }}" placeholder="Format: 2567...">
                          @error('phone_number')
                          <div class="form-text text-danger">{{ $message }}</div>
                          @enderror
                        </div>
-                       <div class="form-group col-md-4">
+                       <div class="form-group col-md-3">
                          <label for="email_address">Email Address</label>
                          <input type="email" class="form-control" id="email_address" name="email_address" value="{{ $supplier->email_address }}">
                          @error('email_address')
