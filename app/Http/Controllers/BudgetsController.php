@@ -103,7 +103,7 @@ class BudgetsController extends Controller
         $budget->status = strip_tags($request->payment_status);
         $budget->save();
 
-        return redirect()->route('budgets.edit', $budget_id)->with('success', 'The budget expenditure has been added successfully');
+        return redirect()->route('budgets.edit', $budget_id)->with('success', 'The budget expenditure has been updated successfully');
     }
 
     /**
