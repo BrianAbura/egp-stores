@@ -1,11 +1,12 @@
 <?php
 
+use App\Http\Controllers\BudgetsController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UsersContoller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -43,5 +44,11 @@ Route::middleware('auth')->group(function(){
     Route::get('items.returned', [ItemsController::class, 'returned'])->name('items.returned');
     Route::get('items.return_items', [ItemsController::class, 'return_items'])->name('items.return_items');
     Route::post('items.store_returned_items', [ItemsController::class, 'store_returned_items'])->name('items.store_returned_items');
-
 });
+
+    Route::middleware(['auth', 'role:Admin'])->group(function () {
+        // User Management as Admin
+        route::resource('users', UsersContoller::class);
+        route::resource('budgets', BudgetsController::class);
+    });
+

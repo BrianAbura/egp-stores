@@ -10,14 +10,16 @@
             <div class="card">
               <div class="card-header">
                 <h4 style="color:navy">{{$supplier->name}}</h4>
+                @if (Auth::user()->role == "Admin")
                 <div class="card-header-action">
                     <a href="" class="badge badge-secondary" data-toggle="modal"
                     data-target=".edit-supplier"><i class="fas fa-edit"></i> Edit</a>
 
                     <a href="" class="badge badge-danger" data-toggle="modal"
-                    data-target=".edit-supplier"><i class="fas fa-trash-alt"></i> Delete</a>
+                    data-target="#deleteSupplier"><i class="fas fa-trash-alt"></i> Delete</a>
 
                   </div>
+                @endif
               </div>
               <div class="card-body">
                       <div class="row">
@@ -52,34 +54,40 @@
                       </div>
                       <br/>
                       <hr/>
-
-                      {{-- <p class="section-title">supplier Transactions</p>
+                      <p class="section-title">Supplier Orders</p>
                       <div class="card-body">
                         <div class="table-responsive">
                           <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                             <thead>
                               <tr>
-                                <th>Name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Age</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
+                                <th>Order ID</th>
+                                <th>Order Date</th>
+                                <th>Expected Delivery Date</th>
+                                <th>Delivery Status</th>
+                                <th>Action</th>
                               </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                <td>Tiger Nixon</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011/04/25</td>
-                                <td>$320,800</td>
-                              </tr>
+                                @foreach ($orders as $order)
+                                <tr>
+
+                                    <td>{{ $order->id }}</td>
+                                    <td>{{ date('d-m-Y', strtotime($order->order_date)) }}</td>
+                                    <td>{{ date('d-m-Y', strtotime($order->expected_delivery_date)) }}</td>
+                                    <td>
+                                        @if ($order->delivery_status == 0)
+                                            <div class="badge badge-warning">Pending</div>
+                                        @else
+                                            <div class="badge badge-success">Delivered</div>
+                                        @endif
+                                    </td>
+                                    <td> <a href="{{route('purchase_order.show', $order->id)}}" class="btn btn-primary btn-sm"> <i class="fas fa-search"></i> Details</a></td>
+                                  </tr>
+                                @endforeach
                             </tbody>
                           </table>
                         </div>
-                      </div> --}}
+                      </div>
               </div>
             </div>
           </div>
@@ -141,6 +149,39 @@
           </div>
         </div>
       </div>
+
+                {{-- Delete order --}}
+                <div class="modal fade" id="deleteSupplier" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalCenterTitle">Delete Supplier</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                     <P style="color: navy">
+                        Are you sure you want to remove <b>{{$supplier->name}}</b> from the suppliers list? <br><br>
+                        <b>Note:</b>
+                        <ol class="text-danger">
+                            <li>You cannot remove a supplier that has pending/delivered orders.</li>
+                            <li>Supplier removal action cannot be reversed.</li>
+                        </ol>
+                     </P>
+                    </div>
+                    <div class="modal-footer bg-whitesmoke br">
+                        <form action="{{ route('supplier.destroy', $supplier->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
  </div>
 @endsection

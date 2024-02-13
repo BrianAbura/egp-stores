@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\purchase_order;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,7 +55,9 @@ class SupplierController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        return view('supplier.show')->with('supplier', $supplier);
+        // $orders = purchase_order::with('supplier')->get($supplier->id);
+        $orders = purchase_order::where('supplier_id', $supplier->id)->get();
+        return view('supplier.show', ['orders' => $orders, 'supplier' => $supplier]);
     }
 
     /**
@@ -95,6 +98,15 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
-        //
+        $orders = purchase_order::where('supplier_id', $supplier->id)->get();
+        if(count($orders) === 0)
+        {
+            supplier::destroy($supplier->id);
+            return redirect()->route('supplier.index')->with('success', 'Supplier successfully removed.');
+        }
+        else{
+            return back()->with('error', $supplier->name.' has pending/delivered orders and cannot be removed from the suppliers list.');
+        }
+
     }
 }

@@ -93,9 +93,18 @@
 
             <li class="dropdown {{ (request()->is('supplier*')) ? 'active' : '' }}">
                 <a href="{{ route('supplier.index') }}"><i data-feather="users"></i><span>Suppliers</span></a>
-              </li>
+            </li>
 
-          </ul>
+            @if ( Auth::user()->role == 'Admin')
+            <li class="dropdown {{ (request()->is('users*')) ? 'active' : '' }}">
+                <a href="{{ route('users.index') }}"><i data-feather="user-check"></i><span>System Users</span></a>
+            </li>
+
+            <li class="dropdown {{ (request()->is('budgets*')) ? 'active' : '' }}">
+                <a href="{{ route('budgets.index') }}"><i data-feather="folder-plus"></i><span>Budget Expenditure</span></a>
+            </li>
+            @endif
+              </ul>
         </aside>
       </div>
 
