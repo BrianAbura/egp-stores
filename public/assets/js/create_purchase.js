@@ -11,11 +11,11 @@ $(document).ready(function () {
       </div>
       <div class="form-group col-md-2">
         <label for="unit_price">Unit Price</label>
-        <input type="text" class="form-control" id="unit_price" name="unit_price[]" required>
+        <input type="text" class="form-control InputAmount" id="unit_price" name="unit_price[]" required>
       </div>
       <div class="form-group col-md-2">
         <label for="quantity">Quantity</label>
-        <input type="number" min="1" class="form-control" id="quantity" name="quantity[]" required>
+        <input type="text" min="1" class="form-control InputAmount" id="quantity" name="quantity[]" required>
       </div>
 
       <div class="form-ds col-md-1 float-right">
@@ -23,10 +23,8 @@ $(document).ready(function () {
 
         <button class="btn btn-sm btn-danger removeRow" type="button"> <i class="fas fa-times-circle" title="Remove Item"></i> Remove</button>
       </div>
-</div>
+    </div>
     `;
-
-    // var rowTemplate = document.getElementById('order_items');
 
     // Add new row
     $('#addRow').on('click', function () {
@@ -37,7 +35,20 @@ $(document).ready(function () {
     $('#items-container').on('click', '.removeRow', function () {
         $(this).closest('.item-row').remove();
     });
+
+    // Event delegation for keyup event to format number with commas
+    $('#items-container').on('keyup', '.InputAmount', function (event) {
+        // Skip for arrow keys
+        if (event.which >= 37 && event.which <= 40) return;
+        // Format number
+        $(this).val(function (index, value) {
+            return value
+                .replace(/\D/g, "")
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        });
+    });
 });
+
 
 // Capture Actual Delivery and person
 $(document).ready(function() {
@@ -56,3 +67,4 @@ $(document).ready(function() {
         }
     });
 });
+

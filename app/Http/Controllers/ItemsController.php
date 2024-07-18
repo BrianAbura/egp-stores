@@ -34,7 +34,7 @@ class ItemsController extends Controller
     {
         $request->validate([
             'item_name' => 'required',
-            'quantity' => 'required|integer',
+            'quantity' => 'required',
             'receiver' => 'required|string',
             'issued_by' => 'required|string',
             'issue_date' => 'required',
@@ -42,7 +42,8 @@ class ItemsController extends Controller
         ]);
 
         $item = items::find($request->item_name);
-        if($request->quantity > $item->quantity)
+        $quantity_issued = str_replace(',','', $request->quantity);
+        if($quantity_issued > $item->quantity)
         {
             return back()->with('error', 'You are trying to issue more than the available quantity on this item.');
         }
@@ -51,7 +52,7 @@ class ItemsController extends Controller
             //Add the transaction
             $trans = new item_transaction();
             $trans->items_id = $item->id;
-            $trans->quantity = $request->quantity;
+            $trans->quantity = $quantity_issued;
             $trans->receiver = $request->receiver;
             $trans->issued_by = $request->issued_by;
             $trans->user_id = Auth::user()->id;
@@ -61,7 +62,7 @@ class ItemsController extends Controller
             $trans->save();
 
             //Reduce the items quantity with issued quantity
-            $item->quantity = ($item->quantity - $request->quantity);
+            $item->quantity = ($item->quantity - $quantity_issued);
             $item->save();
 
             return back()->with('success', 'The item has been successfully issued to '.$request->receiver);
@@ -110,14 +111,15 @@ class ItemsController extends Controller
     public function store_returned_items(Request $request)
     {
         $request->validate([
-            'quantity_returned' => 'required|integer',
+            'quantity_returned' => 'required',
             'return_date' => 'required'
         ]);
 
         $query_trans = item_transaction::find($request->issue_id);
         $item = items::find($query_trans->items_id);
+        $quantity_returned = str_replace(',','', $request->quantity_returned);
 
-        if($request->quantity_returned > $query_trans->quantity)
+        if($quantity_returned > $query_trans->quantity)
         {
             return back()->with('error', 'You are trying to return more items than what was issued out.');
         }
@@ -126,7 +128,7 @@ class ItemsController extends Controller
             //Add the Transaction
             $trans = new item_transaction();
             $trans->items_id = $item->id;
-            $trans->quantity = $request->quantity_returned;
+            $trans->quantity = $quantity_returned;
             $trans->receiver = $query_trans->receiver;
             $trans->issued_by = $query_trans->issued_by;
             $trans->user_id = Auth::user()->id;
@@ -138,7 +140,7 @@ class ItemsController extends Controller
             $trans->save();
 
             //Increase the items quantity with returned items
-            $item->quantity = ($item->quantity + $request->quantity_returned);
+            $item->quantity = ($item->quantity + $quantity_returned);
             $item->save();
 
             return back()->with('success', 'The item(s) return record has been captured successfully.');

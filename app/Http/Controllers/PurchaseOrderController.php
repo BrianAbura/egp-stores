@@ -58,8 +58,8 @@ class PurchaseOrderController extends Controller
             // Process the submitted data,
             $itemNames = $request->input('item_name');
             $ItemDescs = $request->input('item_description');
-            $ItemPrices = $request->input('unit_price');
-            $itemQtys = $request->input('quantity');
+            $ItemPrices = str_replace(',','', $request->input('unit_price'));
+            $itemQtys = str_replace(',','', $request->input('quantity'));
 
              // Loop through the items
             foreach($itemNames as $key => $item_name){
@@ -132,8 +132,8 @@ class PurchaseOrderController extends Controller
         // Process the newly submitted data, including the dynamically added rows
         $itemNames = $request->input('item_name');
         $ItemDescs = $request->input('item_description');
-        $ItemPrices = $request->input('unit_price');
-        $itemQtys = $request->input('quantity');
+        $ItemPrices = str_replace(',','', $request->input('unit_price'));
+        $itemQtys = str_replace(',','', $request->input('quantity'));
 
         if (empty($itemNames)) {
             //return ()->with('error', 'The Purchase Order cannot be saved without the order items. Please add order items and resubmit.');

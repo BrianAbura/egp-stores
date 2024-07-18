@@ -27,7 +27,7 @@
                         </div>
                         <div class="form-group col-md-2">
                           <label for="quantity_returned">Quantity Returned</label>
-                          <input type="number" class="form-control" min="0" id="quantity_returned" name="quantity_returned" value="{{ old('quantity_returned') }}" >
+                          <input type="text" class="form-control InputAmount" min="0" id="quantity_returned" name="quantity_returned" value="{{ old('quantity_returned') }}" >
                           @error('quantity_returned')
                           <div class="form-text text-danger">{{ $message }}</div>
                           @enderror

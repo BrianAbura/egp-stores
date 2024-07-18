@@ -133,8 +133,10 @@
   <script src="{{asset('assets/js/page/toastr.js')}}"></script>
   <script src="{{asset('assets/js/scripts.js')}}"></script>
   <script src="{{asset('assets/js/custom.js')}}"></script>
+
   <script>
     $('.InputAmount').keyup(function(event) {
+      // skip for arrow keys
       if(event.which >= 37 && event.which <= 40) return;
       // format number
       $(this).val(function(index, value) {

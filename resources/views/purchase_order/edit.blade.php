@@ -93,11 +93,11 @@
                               </div>
                               <div class="form-group col-md-2">
                                 <label for="unit_price">Unit Price</label>
-                                <input type="text" class="form-control" id="unit_price" name="unit_price[]" value="{{ $item->unit_price }}" required>
+                                <input type="text" class="form-control InputAmount" id="unit_price" name="unit_price[]" value="{{ $item->unit_price }}" required>
                               </div>
                               <div class="form-group col-md-2">
                                 <label for="quantity">Quantity</label>
-                                <input type="number" min="1" class="form-control" id="quantity" name="quantity[]" value="{{ $item->quantity }}" required>
+                                <input type="text" min="1" class="form-control InputAmount" id="quantity" name="quantity[]" value="{{ $item->quantity }}" required>
                               </div>
                               <div class="form-ds col-md-1 float-right">
                                 <br>

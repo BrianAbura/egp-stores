@@ -30,7 +30,7 @@
                         </div>
                         <div class="form-group col-md-2">
                           <label for="quantity">Quantity</label>
-                          <input type="number" class="form-control" min="0" id="quantity" name="quantity" value="{{ old('quantity') }}" >
+                          <input type="text" class="form-control InputAmount" min="0" id="quantity" name="quantity" value="{{ old('quantity') }}" >
                           @error('quantity')
                           <div class="form-text text-danger">{{ $message }}</div>
                           @enderror

@@ -30,7 +30,7 @@ class BudgetsController extends Controller
     {
         $request->validate([
             'budget_description' => 'required',
-            'amount' => 'required|integer',
+            'amount' => 'required',
             'allocated_to' => 'required',
             'budget_period' => 'required',
             'date_submitted' => 'required',
@@ -45,7 +45,7 @@ class BudgetsController extends Controller
         }
         $budget = new budgets();
         $budget->description = strip_tags($request->budget_description);
-        $budget->amount = strip_tags($request->amount);
+        $budget->amount = strip_tags(str_replace(',','', $request->amount));
         $budget->budget_period = strip_tags($request->budget_period);
         $budget->allocated_to = strip_tags($request->allocated_to);
         $budget->date_submitted = strip_tags($request->date_submitted);
@@ -80,7 +80,7 @@ class BudgetsController extends Controller
     {
         $request->validate([
             'budget_description' => 'required',
-            'amount' => 'required|integer',
+            'amount' => 'required',
             'allocated_to' => 'required',
             'budget_period' => 'required',
             'date_submitted' => 'required',
@@ -95,7 +95,7 @@ class BudgetsController extends Controller
 
         $budget = budgets::find($budget_id);
         $budget->description = strip_tags($request->budget_description);
-        $budget->amount = strip_tags($request->amount);
+        $budget->amount = strip_tags(str_replace(',','', $request->amount));
         $budget->budget_period = strip_tags($request->budget_period);
         $budget->allocated_to = strip_tags($request->allocated_to);
         $budget->date_submitted = strip_tags($request->date_submitted);

@@ -25,7 +25,7 @@
                         </div>
                         <div class="form-group col-md-2">
                           <label for="amount">Amount</label>
-                          <input type="text" class="form-control" id="amount" name="amount" value="{{ old('amount') }}" >
+                          <input type="text" class="form-control InputAmount" id="amount" name="amount" value="{{ old('amount') }}" >
                           @error('amount')
                           <div class="form-text text-danger">{{ $message }}</div>
                           @enderror
