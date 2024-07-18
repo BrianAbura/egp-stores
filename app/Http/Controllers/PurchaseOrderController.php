@@ -55,7 +55,7 @@ class PurchaseOrderController extends Controller
 
             $order_id = $order->id; // ID of the order
 
-            // Process the submitted data, including the dynamically added rows
+            // Process the submitted data,
             $itemNames = $request->input('item_name');
             $ItemDescs = $request->input('item_description');
             $ItemPrices = $request->input('unit_price');
@@ -115,7 +115,8 @@ class PurchaseOrderController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update t
+     * he specified resource in storage.
      */
     public function update(Request $request, $order_id)
     {

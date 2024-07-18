@@ -133,6 +133,18 @@
   <script src="{{asset('assets/js/page/toastr.js')}}"></script>
   <script src="{{asset('assets/js/scripts.js')}}"></script>
   <script src="{{asset('assets/js/custom.js')}}"></script>
+  <script>
+    $('.InputAmount').keyup(function(event) {
+      if(event.which >= 37 && event.which <= 40) return;
+      // format number
+      $(this).val(function(index, value) {
+        return value
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+    </script>
 
 @if (session('success'))
 <script>
